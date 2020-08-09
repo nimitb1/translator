@@ -9,9 +9,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,17 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UIResourceCompile implements IUIResourceCompile {
 
+	private static String baseFilePath;
+
+	@Override
+	public void setBaseFilePath(String baseFilePath) {
+		UIResourceCompile.baseFilePath = baseFilePath;
+	}
+
 	@Async
 	public void initProcess(String uniqeuId, String directory){
 		List<String> fileNames = getFileList(directory);
 		try{
 			fileNames.stream().forEach(file -> {
 				try {
-					parseData(getFileData(file), "");
-				} catch (IOException e) {
-					log.error("Error occurred while parsing the data for " + uniqeuId);
-					e.printStackTrace();
-				} catch (InvalidFormatException e) {
+					parseData(getFileData(file), uniqeuId);
+				} catch (IOException | InvalidFormatException | JSONException e) {
 					log.error("Error occurred while parsing the data for " + uniqeuId);
 					e.printStackTrace();
 				}
@@ -91,7 +93,6 @@ public class UIResourceCompile implements IUIResourceCompile {
 	 * @return
 	 * @throws IOException
 	 * @throws JSONException
-	 * @throws InvalidFormatException
 	 * @throws EncryptedDocumentException
 	 */
 	@Override
@@ -149,7 +150,7 @@ public class UIResourceCompile implements IUIResourceCompile {
 		String parseData = jsonToString(json.toString(), "");
 		String[] parseArray = parseData.split("\n");
 
-		writeExcel(parseArray, "/home/nimibans/personal/test/MyFirstExcel.xlsx");
+		writeExcel(parseArray, baseFilePath + fileName);
 
 		return success;
 

@@ -20,6 +20,8 @@ import java.util.Map;
 
 public interface IUIResourceCompile {
 
+	void setBaseFilePath(String path);
+
 	void initProcess(String uniqeuId, String directory);
 
 	String getFileData(String fileName) throws IOException;
@@ -51,9 +53,9 @@ public interface IUIResourceCompile {
 		return parsedData;
 	}
 
-    default void writeExcel(String[] data, String excelName) throws IOException, EncryptedDocumentException, InvalidFormatException {
+    default void writeExcel(String[] data, String fileName) throws IOException, EncryptedDocumentException, InvalidFormatException {
 
-		File file = new File(excelName);
+		File file = new File(fileName);
 		XSSFWorkbook translationSheet = null;
 		XSSFSheet sheet = null;
 		int sheetLastIndex = 0;

@@ -1,6 +1,7 @@
 package com.lang.translator.service;
 
 import com.lang.translator.dto.FileStorageProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
+@Slf4j
 public class FileStorageService implements IFileStorageService {
 
     private final String fileStoragePath;
@@ -24,7 +26,7 @@ public class FileStorageService implements IFileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) throws Exception {
         fileStoragePath = fileStorageProperties.getUploadDir();
-        System.out.println("Creating the storage folders!");
+        log.info("Creating the storage folders!");
         try {
             File root = new File(fileStoragePath);
             root.mkdirs();
@@ -37,15 +39,17 @@ public class FileStorageService implements IFileStorageService {
     }
 
     @Override
-    public String storeFile(MultipartFile file) {
-        String uniqueId = "";
-        System.out.println("Starting the file storage");
+    public String storeFile(MultipartFile file, String emailId) {
+        resourceCompile.setBaseFilePath(fileStoragePath);
+        String uniqueId = generateUniqueId(emailId, StringUtils.cleanPath(file.getOriginalFilename()));
+        log.info("Starting the file storage for fileId: " + uniqueId);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fullPath = fileStoragePath + "/" + fileName;
         File targetFile = new File(fullPath);
         OutputStream os = null;
         try {
             if(targetFile.exists()){
+                log.error("File already exists with the same name");
                 throw new FileAlreadyExistsException("File already exists");
             }
             os = new FileOutputStream(targetFile);
@@ -58,19 +62,24 @@ public class FileStorageService implements IFileStorageService {
             os.flush();
             os.close();
 
-            System.out.println("File Storage completed");
-            System.out.println("Starting file unzipping");
+            log.info("File Storage completed");
+            log.info("Starting file unzipping");
             unzipFile(fileName);
         } catch (IOException e) {
-            System.out.println("Error while storing the file");
+            log.error("Error while storing the file");
             e.printStackTrace();
         }
         resourceCompile.initProcess(uniqueId, fullPath);
         return uniqueId;
     }
 
+    @Override
+    public String getZipFile(String uniqueId) {
+        return fileStoragePath + "/" + uniqueId + ".zip";
+    }
+
     private void unzipFile(String fileName) throws IOException {
-        System.out.println("Starting file extraction ::"  + fileName);
+        log.info("Starting file extraction ::"  + fileName);
         String extractionPath = fileStoragePath + "/" + fileName.split("\\.")[0];
         File filesDir = new File(extractionPath);
         if (!filesDir.exists()){
@@ -84,13 +93,13 @@ public class FileStorageService implements IFileStorageService {
         while(zipEntry != null){
             String filePath = extractionPath + "/" + zipEntry.getName();
             if(zipEntry.isDirectory()){
-                System.out.println("Found a Dir");
+                log.info("Found a Dir");
                 File dir = new File(filePath);
                 dir.mkdir();
             } else {
-                System.out.println("Found file, moving!");
+                log.info("Found file, moving!");
                 extractFile(zipInputStream, filePath);
-                System.out.println("moving complete");
+                log.info("moving complete");
             }
             zipEntry = zipInputStream.getNextEntry();
         }
