@@ -28,7 +28,7 @@ public interface IUIResourceCompile {
 
     List getFileList(String directory);
 
-    boolean parseData(String fileData, String fileName) throws IOException, JSONException, EncryptedDocumentException, InvalidFormatException;
+    void parseData(String fileData, String fileName) throws IOException, JSONException, EncryptedDocumentException, InvalidFormatException;
 
     default String jsonToString(String json, String parsedData) throws IOException {
 
@@ -53,7 +53,7 @@ public interface IUIResourceCompile {
 		return parsedData;
 	}
 
-    default void writeExcel(String[] data, String fileName) throws IOException, EncryptedDocumentException, InvalidFormatException {
+    default void writeExcel(String[] data, String fileName) throws IOException, EncryptedDocumentException {
 
 		File file = new File(fileName);
 		XSSFWorkbook translationSheet = null;
