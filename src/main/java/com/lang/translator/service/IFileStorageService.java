@@ -11,6 +11,8 @@ public interface IFileStorageService {
 
     String getZipFile(String uniqueId);
 
+    String getExcelFilePath(String uniqueId);
+
     default String generateUniqueId(String emailId, String fileName) {
         int strength = 5;
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());

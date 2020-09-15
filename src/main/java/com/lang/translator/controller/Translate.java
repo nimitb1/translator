@@ -5,10 +5,13 @@ import com.lang.translator.service.IUIResourceCompile;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
 //TODO: add the email validation
@@ -16,9 +19,6 @@ import javax.websocket.server.PathParam;
 @RequestMapping("/translate")
 @Slf4j
 public class Translate {
-
-    @Autowired
-    IUIResourceCompile uiCompile;
 
     @Autowired
     IFileStorageService storageService;
@@ -33,19 +33,12 @@ public class Translate {
     }
 
     /**
-     * Method to fetch the converted the zip file.
-     */
-    @GetMapping(value="/download/zip", produces = "application/zip")
-    public void getZipFile(@RequestParam("uniqueId") String uniqueId) {
-
-    }
-
-    /**
      * Method to get the excel file to containing the keys and values.
      */
-    @GetMapping(value = "/download/excel/{uniqueId}", produces = "application/zip")
-    public void getExcelFile(@PathParam("uniqueId") String uniqueId, @RequestParam("emailId") String emailId) {
-
+    @GetMapping(value = "/download/excel", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public FileSystemResource getExcelFile(@RequestParam("uniqueId") String uniqueId, @RequestParam("emailId") String emailId) {
+        log.info("Recieved the request to fetch the file: {}", uniqueId);
+        return new FileSystemResource(storageService.getExcelFilePath(uniqueId));
     }
 
 }

@@ -2,9 +2,7 @@ package com.lang.translator.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -120,63 +118,5 @@ public class UIResourceCompile implements IUIResourceCompile {
 			e.printStackTrace();
 		}
 	}
-	/*public void parseData(String fileData, String fileName) {
-
-		//Sanitizing the file for the arguments
-		int index = fileData.indexOf("function");
-		while(fileData.charAt(index) != '(')
-			index++;
-
-		String args = "";
-		index++;
-		while(fileData.charAt(index) != ')') {
-			args += fileData.charAt(index);
-			index++;
-		}
-
-		String[] argArray = args.split(",");
-
-		Arrays.sort(argArray);
-
-		//Making json of the file
-		index = fileData.indexOf("return");
-
-		while(fileData.charAt(index) != '{') {
-			index++;
-		}
-
-		//Fetch the remaining substring.
-		String subjson = fileData.substring(index);
-
-		//Remove the remaining non-required data for obtaining complete JSON
-		index = subjson.indexOf(';');
-
-		String comJSON = subjson.substring(0, index);
-
-		if(args != "") {
-			for (String arg : argArray) {
-				comJSON = comJSON.replaceAll(arg.trim(), "0");
-			}
-		}
-
-		comJSON = comJSON.replaceAll("\"(\\S+)\":", "$1:");
-		*//**
-		 * : \"*\"(\S+)\":\"
-		 * : \"$1\"
-		 *//*
-		String result = comJSON.replaceAll("(\\S+):", "\"$1\":");
-
-		JSONObject json = null;
-		try {
-			json = new JSONObject(comJSON);
-			String parseData = jsonToString(json.toString(), "");
-			String[] parseArray = parseData.split("\n");
-
-			writeExcel(parseArray, baseFilePath + "/" + fileName);
-		} catch (JSONException | IOException | InvalidFormatException e) {
-			log.error("Error encountered while parsing the file {}, {}", fileName, e.getMessage());
-			e.printStackTrace();
-		}
-	}*/
 
 }

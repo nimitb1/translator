@@ -78,6 +78,11 @@ public class FileStorageService implements IFileStorageService {
         return fileStoragePath + "/" + uniqueId + ".zip";
     }
 
+    @Override
+    public String getExcelFilePath(String uniqueId) {
+        return fileStoragePath + "/" + uniqueId + ".xlsx";
+    }
+
     private void unzipFile(String fileName) throws IOException {
         log.info("Starting file extraction ::"  + fileName);
         String extractionPath = fileStoragePath + "/" + fileName.split("\\.")[0];

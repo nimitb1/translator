@@ -55,7 +55,7 @@ public interface IUIResourceCompile {
 
     default void writeExcel(String[] data, String fileName) throws IOException, EncryptedDocumentException {
 
-		File file = new File(fileName);
+		File file = new File(fileName + ".xlsx");
 		XSSFWorkbook translationSheet = null;
 		XSSFSheet sheet = null;
 		int sheetLastIndex = 0;
@@ -65,7 +65,8 @@ public interface IUIResourceCompile {
 			for (String datum : data) {
 				if(datum.trim().length() > 0) {
 					Row row = sheet.createRow(sheetLastIndex++);
-					row.createCell(0).setCellValue((String)datum);
+					row.createCell(0).setCellValue((String)datum.split(":")[0]);
+					row.createCell(0).setCellValue((String)datum.split(":")[1]);
 				}
 			}
 
@@ -75,10 +76,11 @@ public interface IUIResourceCompile {
 			translationSheet = new XSSFWorkbook(inputStream);
 			sheet = translationSheet.getSheetAt(0);
 			sheetLastIndex = sheet.getLastRowNum();
-			for (Object datum : data) {
+			for (String datum : data) {
 				if(datum.toString().trim().length() > 0) {
 					Row row = sheet.createRow(sheetLastIndex++);
-					row.createCell(0).setCellValue(datum.toString());
+					row.createCell(0).setCellValue((String)datum.split(":")[0]);
+					row.createCell(0).setCellValue((String)datum.split(":")[1]);
 				}
 			}
 			inputStream.close();
