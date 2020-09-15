@@ -29,7 +29,7 @@ public class Translate {
     @PostMapping("/upload/zip")
     public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("emailId") String emailId) {
         log.info("Received the file>>" + file.getName() + "--" + file.getContentType());
-        return ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':' "+ storageService.storeFile(file, emailId) + "}");
+        return ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':'"+ storageService.storeFile(file, emailId) + "'}");
     }
 
     /**
