@@ -66,7 +66,7 @@ public interface IUIResourceCompile {
 				if(datum.trim().length() > 0) {
 					Row row = sheet.createRow(sheetLastIndex++);
 					row.createCell(0).setCellValue((String)datum.split(":")[0]);
-					row.createCell(0).setCellValue((String)datum.split(":")[1]);
+					row.createCell(1).setCellValue((String)datum.split(":")[1]);
 				}
 			}
 
@@ -80,7 +80,7 @@ public interface IUIResourceCompile {
 				if(datum.toString().trim().length() > 0) {
 					Row row = sheet.createRow(sheetLastIndex++);
 					row.createCell(0).setCellValue((String)datum.split(":")[0]);
-					row.createCell(0).setCellValue((String)datum.split(":")[1]);
+					row.createCell(1).setCellValue((String)datum.split(":")[1]);
 				}
 			}
 			inputStream.close();
