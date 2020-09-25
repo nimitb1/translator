@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
-//TODO: add the email validation
 @RestController
 @RequestMapping("/translate")
 @Slf4j
@@ -37,8 +36,15 @@ public class Translate {
      */
     @GetMapping(value = "/download/excel", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public FileSystemResource getExcelFile(@RequestParam("uniqueId") String uniqueId, @RequestParam("emailId") String emailId) {
-        log.info("Recieved the request to fetch the file: {}", uniqueId);
+        log.info("Received the request to fetch the file: {}", uniqueId);
         return new FileSystemResource(storageService.getExcelFilePath(uniqueId));
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFileForTranslation(@RequestParam("zip")MultipartFile zipFile, @RequestParam("translate")MultipartFile translate, @RequestParam("emailId") String emailId) {
+        log.info("Received the request to translate the file: {}", emailId);
+        return ResponseEntity.ok("{'msg':'Files have been uploaded.','ReferenceNo':'"
+                                        + storageService.storeFilesForTranslation(zipFile, translate, emailId) + "'}");
     }
 
 }

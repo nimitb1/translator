@@ -20,7 +20,6 @@ public class FileStorageService implements IFileStorageService {
 
     private static final int BUFFER_SIZE = 4096;
 
-    @Autowired
     IUIResourceCompile resourceCompile;
 
     @Autowired
@@ -40,11 +39,25 @@ public class FileStorageService implements IFileStorageService {
 
     @Override
     public String storeFile(MultipartFile file, String emailId) {
+        resourceCompile = new UIResourceCompile();
         resourceCompile.setBaseFilePath(fileStoragePath);
-        String uniqueId = generateUniqueId(emailId, StringUtils.cleanPath(file.getOriginalFilename()));
+        String uniqueId = generateUniqueId();
         log.info("Starting the file storage for fileId: " + uniqueId);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fullPath = fileStoragePath + "/" + fileName;
+        fileSave(file, fullPath);
+        try {
+            unzipFile(null, fileName);
+        } catch (IOException e) {
+            log.error("Error occurred while unzipping the file, {} for {}", fileName, emailId, e);
+            e.printStackTrace();
+        }
+        resourceCompile.initProcess(uniqueId, fullPath);
+        return uniqueId;
+    }
+
+    private void fileSave(MultipartFile file, String fullPath) {
+        log.info("Initiating the file storage");
         File targetFile = new File(fullPath);
         OutputStream os = null;
         try {
@@ -64,13 +77,10 @@ public class FileStorageService implements IFileStorageService {
 
             log.info("File Storage completed");
             log.info("Starting file unzipping");
-            unzipFile(fileName);
         } catch (IOException e) {
-            log.error("Error while storing the file");
+            log.error("Error while storing the file", e);
             e.printStackTrace();
         }
-        resourceCompile.initProcess(uniqueId, fullPath);
-        return uniqueId;
     }
 
     @Override
@@ -83,9 +93,38 @@ public class FileStorageService implements IFileStorageService {
         return fileStoragePath + "/" + uniqueId + ".xlsx";
     }
 
-    private void unzipFile(String fileName) throws IOException {
+    @Override
+    public String storeFilesForTranslation(MultipartFile zipFile, MultipartFile excelFile, String emailId) {
+        String uniqueId = generateUniqueId();
+        resourceCompile = new UIResourceCompile();
+        String translateFileStoragePath = fileStoragePath + "/" + uniqueId;
+        resourceCompile.setBaseFilePath(translateFileStoragePath);
+        log.info("Setting the file path to {}", translateFileStoragePath );
+        String zipFileName = StringUtils.cleanPath(zipFile.getOriginalFilename());
+        String excelFileName = StringUtils.cleanPath(excelFile.getOriginalFilename());
+
+        String fullZipFilePath = translateFileStoragePath + "/" + zipFileName;
+        String fullExcelFilePath = translateFileStoragePath + "/" + excelFileName;
+        fileSave(zipFile, fullZipFilePath);
+        fileSave(excelFile, fullExcelFilePath);
+
+        try {
+            unzipFile(translateFileStoragePath, zipFileName);
+        } catch (IOException e) {
+            log.error("Error while extracting the file {} for {}", zipFile, emailId, e);
+            e.printStackTrace();
+        }
+
+        //TODO: Code to put the translated values into the files. Get the translation language value from the user.
+
+        return uniqueId;
+    }
+
+    private void unzipFile(String storePath, String fileName) throws IOException {
         log.info("Starting file extraction ::"  + fileName);
-        String extractionPath = fileStoragePath + "/" + fileName.split("\\.")[0];
+        int dirCount = 0;
+        int fileCount = 0;
+        String extractionPath = storePath == null?fileStoragePath:storePath + "/" + fileName.split("\\.")[0];
         File filesDir = new File(extractionPath);
         if (!filesDir.exists()){
             filesDir.mkdirs();
@@ -98,16 +137,16 @@ public class FileStorageService implements IFileStorageService {
         while(zipEntry != null){
             String filePath = extractionPath + "/" + zipEntry.getName();
             if(zipEntry.isDirectory()){
-                log.info("Found a Dir");
+                ++dirCount;
                 File dir = new File(filePath);
                 dir.mkdir();
             } else {
-                log.info("Found file, moving!");
+                ++fileCount;
                 extractFile(zipInputStream, filePath);
-                log.info("moving complete");
             }
             zipEntry = zipInputStream.getNextEntry();
         }
+        log.info("Extraction Complete. Total extracted folders = {}, files = {}", dirCount, fileCount);
     }
 
     private void extractFile(ZipInputStream zipInputStream, String filePath) throws IOException {

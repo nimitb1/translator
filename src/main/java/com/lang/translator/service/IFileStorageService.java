@@ -14,7 +14,9 @@ public interface IFileStorageService {
 
     String getExcelFilePath(String uniqueId);
 
-    default String generateUniqueId(String emailId, String fileName) {
+    String storeFilesForTranslation(MultipartFile zipFile, MultipartFile excelFile, String emailId);
+
+    default String generateUniqueId() {
         return UUID.randomUUID().toString();
     }
 

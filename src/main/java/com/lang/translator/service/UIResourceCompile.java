@@ -25,11 +25,13 @@ public class UIResourceCompile implements IUIResourceCompile {
 
 	@Override
 	public void setBaseFilePath(String baseFilePath) {
-		UIResourceCompile.baseFilePath = baseFilePath;
+		this.baseFilePath = baseFilePath;
 	}
 
 	@Async
 	public void initProcess(String uniqeuId, String directory){
+		Date d1 = new Date();
+		log.info("Started compiling the data in the file");
 		directory = directory.substring(0, directory.lastIndexOf('.'));
 		List<String> fileNames = getFileList(directory);
 		try{
@@ -41,6 +43,8 @@ public class UIResourceCompile implements IUIResourceCompile {
 			log.error("Error occurred while parsing the data for " + uniqeuId);
 			e.printStackTrace();
 		}
+		Date d2 = new Date();
+		log.info("Completed compiling data in the file in {}", (d2.getTime() - d1.getTime()));
 	}
 
 	/**
