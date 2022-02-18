@@ -1,7 +1,7 @@
 package com.nb.translator.controller;
 
-import com.lang.translator.service.IFileStorageService;
-import com.lang.translator.service.IUIResourceCompile;
+import com.nb.translator.service.IFileStorageService;
+import com.nb.translator.service.IUIResourceCompile;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class Translate {
      * Method to upload the zip file containing the keys and values for converting the same into Excel file
      */
     @PostMapping("/upload/zip")
-    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("emailId") String emailId) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file/*, @RequestParam("emailId") String emailId*/) {
         log.info("Received the file>>" + file.getName() + "--" + file.getContentType());
-        return ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':'"+ storageService.storeFile(file, emailId) + "'}");
+        return ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':'"+ storageService.storeFile(file, "abc@gmail.com") + "'}");
     }
 
     /**

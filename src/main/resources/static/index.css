@@ -1,0 +1,23 @@
+.index-body{
+    background-color: #F9F5EA;
+}
+
+.index-header {
+    text-align: center;
+}
+
+.index-div{
+    text-align: left;
+    background-color: #EDE8D5;
+}
+
+.index-form {
+    background-color: #F9F5EA;
+    width: 300px;
+    padding: 10px;
+    border: 2px solid black;
+}
+
+.index-input {
+    padding: 5px;
+}

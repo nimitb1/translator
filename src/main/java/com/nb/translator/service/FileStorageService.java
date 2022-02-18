@@ -1,6 +1,6 @@
 package com.nb.translator.service;
 
-import com.lang.translator.dto.FileStorageProperties;
+import com.nb.translator.dto.FileStorageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
