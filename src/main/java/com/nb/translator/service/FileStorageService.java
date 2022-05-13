@@ -124,7 +124,9 @@ public class FileStorageService implements IFileStorageService {
         log.info("Starting file extraction ::"  + fileName);
         int dirCount = 0;
         int fileCount = 0;
-        String extractionPath = storePath == null?fileStoragePath:storePath + "/" + fileName.split("\\.")[0];
+        int index = fileName.lastIndexOf(".");
+        String fileStorePath = fileName.substring(0, index);
+        String extractionPath = storePath == null?fileStoragePath + "/" + fileStorePath : storePath + "/" + fileName.split("\\.")[0];
         File filesDir = new File(extractionPath);
         if (!filesDir.exists()){
             filesDir.mkdirs();

@@ -40,6 +40,9 @@ public class Translate {
         return new FileSystemResource(storageService.getExcelFilePath(uniqueId));
     }
 
+    /**
+     * Method to upload the file with the translations and get the zip file with translated values.
+     */
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFileForTranslation(@RequestParam("zip")MultipartFile zipFile, @RequestParam("translate")MultipartFile translate, @RequestParam("emailId") String emailId) {
         log.info("Received the request to translate the file: {}", emailId);
