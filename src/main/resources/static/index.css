@@ -6,6 +6,14 @@
     text-align: center;
 }
 
+.float-left{
+    float: left;
+}
+
+.clear-float{
+    float: clear;
+}
+
 .index-div{
     text-align: left;
     background-color: #EDE8D5;
