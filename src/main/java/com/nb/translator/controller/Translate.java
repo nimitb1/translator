@@ -25,10 +25,11 @@ public class Translate {
     /**
      * Method to upload the zip file containing the keys and values for converting the same into Excel file
      */
-    @PostMapping("/upload/zip")
-    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file/*, @RequestParam("emailId") String emailId*/) {
+    @PostMapping(value = "/upload/zip", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public FileSystemResource uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("emailId") String emailId) {
         log.info("Received the file>>" + file.getName() + "--" + file.getContentType());
-        return ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':'"+ storageService.storeFile(file, "abc@gmail.com") + "'}");
+        return new FileSystemResource(storageService.getExcelFilePath(storageService.storeFile(file, emailId)));
+                //ResponseEntity.ok("{'msg':'File uploaded.','ReferenceNo':'"+ storageService.storeFile(file, "abc@gmail.com") + "'}");
     }
 
     /**

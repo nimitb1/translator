@@ -27,8 +27,6 @@ public class UIResourceCompile implements IUIResourceCompile {
 	public void setBaseFilePath(String baseFilePath) {
 		this.baseFilePath = baseFilePath;
 	}
-
-	@Async
 	public void initProcess(String uniqeuId, String directory){
 		Date d1 = new Date();
 		log.info("Started compiling the data in the file");

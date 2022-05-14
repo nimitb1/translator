@@ -18,10 +18,10 @@
         </ol>
         <br/>
         <form class="index-form" method="post" th:action="@{/translate/upload/zip}" enctype="multipart/form-data">
-            <!--<p>
+            <p>
                 <label for="email">E-Mail:</label>
-                <input id="email" type="email">
-            </p>-->
+                <input id="email" name="emailId" type="email">
+            </p>
             <p>
                 <label for="uploadFile">Upload File</label>
                 <input id="uploadFile" name="file" type="file">
