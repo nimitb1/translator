@@ -9,7 +9,6 @@
     <script source="index.js"></script>
 </head>
 <body class="index-body">
-<!--    <img src="images/android-chrome-512X512.png">-->
     <h2 class="index-header">Welcome to Convert Lingo!</h2>
     <h3 class="index-header">The site where you can bulk translate your files for free!!</h3>
     <div class="index-div">
@@ -18,20 +17,42 @@
             <li>Upload your zipped file which is containing all the files that needs to be translated.</li>
             <li>We will share the Excel file with all the key value pairs for your review</li>
             <li>Upload the reviewed file and get the translated values for verification.</li>
-            <li>Upload the Excel with translated values and the resource files and get the file with translated data.</li>
+            <li>Upload the Excel with translated values and the resource files and get the file with translated data.</li>w2
         </ol>
         <br/>
-        <form class="index-form" method="post" th:action="@{/translate/upload/zip}" enctype="multipart/form-data">
-            <p>
-                <label for="email">E-Mail:</label>
-                <input id="email" name="emailId" type="email">
-            </p>
-            <p>
-                <label for="uploadFile">Upload File</label>
-                <input id="uploadFile" name="file" type="file">
-            </p>
-            <button type="submit"> Upload File</button>
-        </form>
+        <div class="float-left">
+            <form name="UploadForCollect" class="zip-upload-form" method="post" th:action="@{/translate/upload/zip}" enctype="multipart/form-data">
+                <p>
+                    <label for="email">E-Mail:</label>
+                    <input id="email" name="emailId" type="email">
+                </p>
+                <p>
+                    <label for="uploadFile">Upload File</label>
+                    <input id="uploadFile" name="file" type="file">
+                </p>
+                <button type="submit"> Upload File</button>
+            </form>
+        </div>
+
+        <div class="float-right">
+            <form name="uploadFroTranslate" class="translate-upload-form" method="post" th:action="@{/translate/upload}" enctype="multipart/form-data">
+                <p>
+                    <label for="email">E-Mail:</label>
+                    <input id="emailId" name="emailId" type="email">
+                </p>
+                <p>
+                    <label for="uploadFile">Upload ZIP File</label>
+                    <input id="uploadZip" name="zip" type="file">
+                </p>
+                <p>
+                    <label for="uploadFile">Upload EXCEL File</label>
+                    <input id="uploadExcel" name="translate" type="file">
+                </p>
+                <button type="submit">Translate</button>
+            </form>
+        </div>
+
+        <div class="float-clear"></div>
     </div>
 </body>
 </html>

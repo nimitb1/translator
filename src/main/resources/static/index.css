@@ -8,6 +8,12 @@
 
 .float-left{
     float: left;
+    padding-left: 450px;
+}
+
+.float-right{
+    float: right;
+    padding-right: 450px
 }
 
 .clear-float{
@@ -19,11 +25,20 @@
     background-color: #EDE8D5;
 }
 
-.index-form {
+.zip-upload-form {
     background-color: #F9F5EA;
     width: 300px;
     padding: 10px;
     border: 2px solid black;
+    align: left
+}
+
+.translate-upload-form {
+    background-color: #F9F5EA;
+    width: 300px;
+    padding: 10px;
+    border: 2px solid black;
+    align: center
 }
 
 .index-input {
